@@ -29,7 +29,7 @@ inputs = Input(shape = input_shape)
 
 #Image Pre Processing Steps
 #Zero Mean And Normalizing image
-normalization = Lambda(lambda x: x / 255.0 - 1.0)(inputs)
+normalization = Lambda(lambda x: x / 127.5 - 0.5)(inputs)
 #Cropping Unwanted region from image
 cropping = Cropping2D(cropping = ((70, 25), (0, 0)))(normalization)
 #End of Image Pre Processing
