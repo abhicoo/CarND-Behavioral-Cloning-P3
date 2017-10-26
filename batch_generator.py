@@ -16,6 +16,7 @@ def generator(samples, batch_size):
 				#Loading Images
 				center_name = './data/IMG/'+batch_sample[0].split('/')[-1]
 				center_image = cv2.imread(center_name)
+				flip_image = cv2.flip(center_image, 1)
 				left_name = './data/IMG/'+batch_sample[1].split('/')[-1]
 				left_image = cv2.imread(left_name)
 				right_name = './data/IMG/'+batch_sample[2].split('/')[-1]
@@ -25,15 +26,9 @@ def generator(samples, batch_size):
 				center_angle = float(batch_sample[3])
 				left_angle = center_angle + correction
 				right_angle = center_angle - correction
-				images.extend([center_image, left_image, right_image])
-				angles.extend([center_angle, left_angle, right_angle])
-			augmented_images = []
-			augmented_angles = []
-			for image, angle in zip(images, angles):
-				augmented_images.append(image)
-				augmented_angles.append(angle)
-				augmented_images.append(cv2.flip(image, 1))
-				augmented_angles.append(angle * -1)
-			X_train = np.array(augmented_images)
-			y_train = np.array(augmented_angles)
+				flip_angle = center_angle * -1
+				images.extend([center_image, left_image, right_image, flip_image])
+				angles.extend([center_angle, left_angle, right_angle, flip_angle])
+			X_train = np.array(images)
+			y_train = np.array(angles)
 			yield shuffle(X_train, y_train)
