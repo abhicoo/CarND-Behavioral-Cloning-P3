@@ -27,6 +27,13 @@ def generator(samples, batch_size):
 				right_angle = center_angle - correction
 				images.extend([center_image, left_image, right_image])
 				angles.extend([center_angle, left_angle, right_angle])
-			X_train = np.array(images)
-			y_train = np.array(angles)
+			augmented_images = []
+			augmented_angles = []
+			for image, angle in zip(images, angles):
+				augmented_images.append(image)
+				augmented_angles.append(angle)
+				augmented_images.append(cv2.flip(image, 1))
+				augmented_angles.append(angle * -1)
+			X_train = np.array(augmented_images)
+			y_train = np.array(augmented_angles)
 			yield shuffle(X_train, y_train)
