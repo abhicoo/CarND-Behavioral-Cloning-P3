@@ -1,5 +1,6 @@
 from keras.models import Model
-from keras.layers import Dense, Activation, Conv2D
+from keras.layers import Dense, Activation
+from keras.layers.convolutional import Convolution2D
 from keras.layers import BatchNormalization, Input, Flatten, Lambda, Cropping2D
 from sklearn.model_selection import train_test_split
 from batch_generator import generator
@@ -33,50 +34,55 @@ cropping = Cropping2D(cropping = ((70, 25), (0, 0)))(normalization)
 #End of Image Pre Processing
 
 #Conv1 layer filter_size of 5 stride 2 and total_filters 24
-conv1 = Conv2D(24, 
-							kernel_size = 5,
-							padding='valid',
-							strides = (2, 2))(cropping)
+conv1 = Convolution2D(24, 
+							nb_row = 5,
+							nb_col = 5,
+							border_mode ='valid',
+							subsample = (2, 2))(cropping)
 
 conv1 = BatchNormalization()(conv1)
 conv1 = Activation('relu')(conv1)
 #End of Conv1
 
 #Conv2 layer filter_size of 5 stride 2 and total_filters 36
-conv2 = Conv2D(36,
-							kernel_size = 5,
-							padding = 'valid',
-							strides = (2, 2))(conv1)
+conv2 = Convolution2D(36,
+							nb_row = 5,
+							nb_col = 5,
+							border_mode = 'valid',
+							subsample = (2, 2))(conv1)
 
 conv2 = BatchNormalization()(conv2)
 conv2 = Activation('relu')(conv2)
 #End of Conv2
 
 #Conv3 layer filter_size of 5 stride 2 and total_filters 48
-conv3 = Conv2D(48,
-							kernel_size = 5,
-							padding = 'valid',
-							strides = (2, 2))(conv2)
+conv3 = Convolution2D(48,
+							nb_row = 5,
+							nb_col = 5,
+							border_mode = 'valid',
+							subsample = (2, 2))(conv2)
 
 conv3 = BatchNormalization()(conv3)
 conv3 = Activation('relu')(conv3)
 #End of Conv3
 
 #Conv4 layer filter_size of 3 stride 1 and total_filters 64
-conv4 = Conv2D(64,
-							kernel_size = 3,
-							padding = 'valid',
-							strides = (1, 1))(conv3)
+conv4 = Convolution2D(64,
+							nb_row = 3,
+							nb_col = 3,
+							border_mode = 'valid',
+							subsample = (1, 1))(conv3)
 
 conv4 = BatchNormalization()(conv4)
 conv4 = Activation('relu')(conv4)
 #End of Conv4
 
 #Conv5 layer filter_size of 3 stride 1 and total_filters 64
-conv5 = Conv2D(64,
-							kernel_size = 3,
-							padding = 'valid',
-							strides = (1, 1))(conv4)
+conv5 = Convolution2D(64,
+							nb_row = 3,
+							nb_col = 3,
+							border_mode = 'valid',
+							subsample = (1, 1))(conv4)
 
 conv5 = BatchNormalization()(conv5)
 conv5 = Activation('relu')(conv5)
