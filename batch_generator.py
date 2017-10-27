@@ -42,10 +42,6 @@ def generator(samples, batch_size):
 					flipped_image = flip_image(image)
 					images.append(flipped_image)
 					angles.append(angles_data[i] * -1)
-					#Brightness Changed Image
-					brightness_changed_image = augment_brightness_camera_images(image)
-					images.append(brightness_changed_image)
-					angles.append(angles_data[i])
 			X_train = np.array(images)
 			y_train = np.array(angles)
 			yield shuffle(X_train, y_train)
