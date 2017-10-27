@@ -3,6 +3,19 @@ import cv2
 from sklearn.utils import shuffle
 import numpy as np
 
+def augment_brightness_camera_images(image):
+	image1 = cv2.cvtColor(image,cv2.COLOR_RGB2HSV)
+	image1 = np.array(image1, dtype = np.float64)
+	random_bright = .5+np.random.uniform()
+	image1[:,:,2] = image1[:,:,2]*random_bright
+	image1[:,:,2][image1[:,:,2]>255]  = 255
+	image1 = np.array(image1, dtype = np.uint8)
+	image1 = cv2.cvtColor(image1,cv2.COLOR_HSV2RGB)
+	return image1
+
+def flip_image(image):
+	return cv2.flip(image, 1)
+
 
 def generator(samples, batch_size):
 	num_samples = len(samples)
@@ -13,30 +26,26 @@ def generator(samples, batch_size):
 			images = []
 			angles = []
 			for batch_sample in batch_samples:
-				#Loading Images
-				center_name = './data/IMG/'+batch_sample[0].split('/')[-1]
-				center_image = cv2.imread(center_name)
-				center_image = cv2.cvtColor(center_image,cv2.COLOR_BGR2RGB)
-				flip_center_image = cv2.flip(center_image, 1)
-				left_name = './data/IMG/'+batch_sample[1].split('/')[-1]
-				left_image = cv2.imread(left_name)
-				left_image = cv2.cvtColor(left_image,cv2.COLOR_BGR2RGB)
-				flip_left_image = cv2.flip(left_image, 1)
-				right_name = './data/IMG/'+batch_sample[2].split('/')[-1]
-				right_image = cv2.imread(right_name)
-				right_image = cv2.cvtColor(right_image,cv2.COLOR_BGR2RGB)
-				flip_right_image = cv2.flip(right_image, 1)
-				#Loading Steering
-				correction = 0.25
 				center_angle = float(batch_sample[3])
-				flip_center_angle = center_angle * -1
+				correction = 0.25
 				left_angle = center_angle + correction
-				flip_left_angle = left_angle * -1
 				right_angle = center_angle - correction
-				flip_right_angle = right_angle * -1
+				angles_data = [center_angle, left_angle, right_angle]
 
-				images.extend([center_image, left_image, right_image, flip_center_image, flip_left_image, flip_right_image])
-				angles.extend([center_angle, left_angle, right_angle, flip_center_angle, flip_left_angle, flip_right_angle])
+				for i in range(3):
+					name = './data/IMG/'+batch_sample[i].split('/')[-1]
+					image = cv2.imread(name)
+					image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+					images.append(image)
+					angles.append(angles_data[i])
+					#Flipped Image
+					flipped_image = flip_image(image)
+					images.append(flipped_image)
+					angles.append(angles_data[i] * -1)
+					#Brightness Changed Image
+					brightness_changed_image = augment_brightness_camera_images(image)
+					images.append(brightness_changed_image)
+					angles.append(angles_data[i])
 			X_train = np.array(images)
 			y_train = np.array(angles)
 			yield shuffle(X_train, y_train)

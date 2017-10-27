@@ -1,7 +1,7 @@
 from keras.models import Model
 from keras.layers import Dense, Activation
 from keras.layers.convolutional import Convolution2D
-from keras.layers import BatchNormalization, Input, Flatten, Lambda, Cropping2D
+from keras.layers import BatchNormalization, Input, Flatten, Lambda, Cropping2D, Dropout
 from sklearn.model_selection import train_test_split
 from batch_generator import generator
 import csv
@@ -96,12 +96,14 @@ fc0 = Flatten()(conv5)
 fc1 = Dense(100)(fc0)
 #fc1 = BatchNormalization()(fc1)
 fc1 = Activation('relu')(fc1)
+fc1 = Dropout(0.5)(fc1)
 #End of FC1
 
 #Second fully connected layer
 fc2 = Dense(50)(fc1)
 #fc2 = BatchNormalization()(fc2)
 fc2 = Activation('relu')(fc2)
+fc2 = Dropout(0.5)(fc2)
 #End of FC2
 
 #Third fully connected layer
