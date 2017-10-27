@@ -7,15 +7,16 @@ from batch_generator import generator
 import csv
 
 batch_size = 128
-epochs = 3
+epochs = 10
 
 samples = []
 with open('./data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
+	next(reader)
 	for line in reader:
 		samples.append(line)
 
-train_samples, validation_samples = train_test_split(samples, test_size = 0.2)
+train_samples, validation_samples = train_test_split(samples, test_size = 0.2, random_state=88)
 total_training_samples = len(train_samples)
 total_validation_samples  = len(validation_samples)
 train_generator = generator(train_samples, batch_size=32)
