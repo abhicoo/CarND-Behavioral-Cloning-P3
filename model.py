@@ -43,6 +43,7 @@ conv1 = Convolution2D(24,
 
 conv1 = BatchNormalization()(conv1)
 conv1 = Activation('relu')(conv1)
+conv1 = Dropout(0.5)(conv1)
 #End of Conv1
 
 #Conv2 layer filter_size of 5 stride 2 and total_filters 36
@@ -54,6 +55,7 @@ conv2 = Convolution2D(36,
 
 conv2 = BatchNormalization()(conv2)
 conv2 = Activation('relu')(conv2)
+conv2 = Dropout(0.5)(conv2)
 #End of Conv2
 
 #Conv3 layer filter_size of 5 stride 2 and total_filters 48
@@ -65,6 +67,7 @@ conv3 = Convolution2D(48,
 
 conv3 = BatchNormalization()(conv3)
 conv3 = Activation('relu')(conv3)
+conv3 = Dropout(0.5)(conv3)
 #End of Conv3
 
 #Conv4 layer filter_size of 3 stride 1 and total_filters 64
@@ -74,8 +77,9 @@ conv4 = Convolution2D(64,
 							border_mode = 'valid',
 							subsample = (1, 1))(conv3)
 
-#conv4 = BatchNormalization()(conv4)
+conv4 = BatchNormalization()(conv4)
 conv4 = Activation('relu')(conv4)
+conv4 = Dropout(0.5)(conv4)
 #End of Conv4
 
 #Conv5 layer filter_size of 3 stride 1 and total_filters 64
@@ -85,8 +89,9 @@ conv5 = Convolution2D(64,
 							border_mode = 'valid',
 							subsample = (1, 1))(conv4)
 
-#conv5 = BatchNormalization()(conv5)
+conv5 = BatchNormalization()(conv5)
 conv5 = Activation('relu')(conv5)
+conv5 = Dropout(0.5)(conv5)
 #End of Conv5
 
 #Flatten the last conv output.
@@ -95,21 +100,21 @@ fc0 = Flatten()(conv5)
 
 #First fully connected layer
 fc1 = Dense(100)(fc0)
-#fc1 = BatchNormalization()(fc1)
+fc1 = BatchNormalization()(fc1)
 fc1 = Activation('relu')(fc1)
 fc1 = Dropout(0.5)(fc1)
 #End of FC1
 
 #Second fully connected layer
 fc2 = Dense(50)(fc1)
-#fc2 = BatchNormalization()(fc2)
+fc2 = BatchNormalization()(fc2)
 fc2 = Activation('relu')(fc2)
 fc2 = Dropout(0.5)(fc2)
 #End of FC2
 
 #Third fully connected layer
 fc3 = Dense(10)(fc2)
-#fc3 = BatchNormalization()(fc3)
+fc3 = BatchNormalization()(fc3)
 fc3 = Activation('relu')(fc3)
 #End of FC3
 
