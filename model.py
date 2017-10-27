@@ -7,12 +7,11 @@ from batch_generator import generator
 import csv
 
 batch_size = 128
-epochs = 10
+epochs = 5
 
 samples = []
 with open('./data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
-	next(reader)
 	for line in reader:
 		samples.append(line)
 
@@ -21,6 +20,7 @@ total_training_samples = len(train_samples)
 total_validation_samples  = len(validation_samples)
 train_generator = generator(train_samples, batch_size=32)
 validation_generator = generator(validation_samples, batch_size=32)
+print(total_training_samples)
 
 #Input Layer for model
 input_shape = (160, 320, 3)
@@ -121,9 +121,9 @@ outputs = Dense(1)(fc3)
 model = Model(input = inputs, output = outputs)
 model.compile(loss = 'mse', optimizer = 'adam')
 model.fit_generator(train_generator,
-									samples_per_epoch = total_training_samples,
+									samples_per_epoch = (total_training_samples * 6),
 									validation_data = validation_generator,
-									nb_val_samples = total_validation_samples,
+									nb_val_samples = (total_validation_samples * 6),
 									nb_epoch = epochs,
 									verbose = 1)
 model.save('model.h5')
