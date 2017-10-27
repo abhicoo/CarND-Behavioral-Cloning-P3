@@ -27,7 +27,7 @@ def generator(samples, batch_size):
 			angles = []
 			for batch_sample in batch_samples:
 				center_angle = float(batch_sample[3])
-				correction = 0.25
+				correction = 0.35
 				left_angle = center_angle + correction
 				right_angle = center_angle - correction
 				angles_data = [center_angle, left_angle, right_angle]
