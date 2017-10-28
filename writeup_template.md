@@ -2,10 +2,6 @@
 
 ##Writeup Template
 
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Behavioral Cloning Project**
 
 The goals / steps of this project are the following:
@@ -18,16 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+[image1]: ./images/model_architecture.png "Model Visualization"
 
 ---
 ###Files Submitted & Code Quality
@@ -54,76 +41,91 @@ The model.py file contains the code for training and saving the convolution neur
 
 ####1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model uses the same layer as NVIDIA end to end self driving car model.
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+My model first uses Keras Lambda layer to Normalize the input.
 
-####2. Attempts to reduce overfitting in the model
+My model consists of 5 convolution layers. 
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The first three layers have filter size of 5x5, depths of 24, 36 and 48 respectively and stride of 2.
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The last two layers have filter size of 3X3, depths of 64 and 64 espectively and stride of 1.
+
+My model consists of 3 fully connected layers.
+
+The model includes RELU layers to introduce nonlinearity.
+
+The model was trained and validated on both the tracks. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 ####3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually.
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was createad by driving vehicle manually on road. 
 
-For details about how I created the training data, see the next section. 
+Model was first trained on center driving data. 
 
-###Model Architecture and Training Strategy
+Images from 3 cameras was use to train the model to stay on the center of the road.
+
+Data Augmentation techniques was used to train the model on different types of data.
+The data augmentation technique I used was to flip all the 3 images. It not only helped the model get more training data but to recover from bias toward the training data.
+
+Data was also created to teach model on how to recover when the vehicle went too left or too right. 
+To collect this data the vehicle was taken to left or right side of road and then the data was recorded while coming back to center.
+The recovery data was collected from both track 1 and track 2.
+
+The center driving data was collected by driving 3-4 laps on track 1.
 
 ####1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The key point in the project was to create a good model architecture and do data augmentation.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+I used the NVIDIA model to train the network as it already was proven to work nicely. 
+The model really worked very nice. 
+The vehicle was able to drive both on track 1 and track 2.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+Initially sometimes the vehicle was not able to recover back to center after going too left and right. But by using the recovery data this problem was solved.
 
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+I split the data into training and validation step and ensured that model was performing good and giving low mean sqaured error on training and validation data.
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 25-118) consisted of a 5 convolution layers with the 3 fully conntected layers.
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+Here is a visualization of the architecture.
 
 ![alt text][image1]
 
 ####3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+To capture good driving behavior, I first recorded 3-4 laps on track one using center lane driving. Here is an example image of center lane driving:
 
 ![alt text][image2]
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to how to go back to center if it want too left or right. 
+These images show what a recovery looks like:
 
 ![alt text][image3]
 ![alt text][image4]
 ![alt text][image5]
 
-Then I repeated this process on track two in order to get more data points.
+Then I repeated this process on track two in order to get more data points. I did a 1 lap of driving on track 2. But created more recovering data for track 2 for sharp turns.
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+To augment the data sat, I also flipped images and angles thinking that this would remove the bias towards the tracking data and also teach model how to drive if in flipped scenario for better generalization. It also helped in providing more training data to model. 
+For example, here is an image that has then been flipped:
 
 ![alt text][image6]
 ![alt text][image7]
 
-Etc ....
+After the collection process, I had 15000 number of data points. 
+Each data point had 3 image center, left, right. The steering angle for left and right images was calculated by adding and subtracing a correction factor of 0.35 from the center steering angle.
+All the 3 image where also flipped with there steering angle also flipped by multiplying by -1.
+The images where also zero centered and normalized by using Keras Lambda layer.
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
+The ideal number of epochs was 5. Found out by checking the training and validation loss and choosing number where both where low.
+I used an adam optimizer so that manually training the learning rate wasn't necessary.
