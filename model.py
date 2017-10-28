@@ -91,16 +91,19 @@ fc0 = Flatten()(conv5)
 #First fully connected layer
 fc1 = Dense(100)(fc0)
 fc1 = Activation('relu')(fc1)
+fc1 = Dropout(0.5)(fc1)
 #End of FC1
 
 #Second fully connected layer
 fc2 = Dense(50)(fc1)
 fc2 = Activation('relu')(fc2)
+fc2 = Dropout(0.5)(fc2)
 #End of FC2
 
 #Third fully connected layer
 fc3 = Dense(10)(fc2)
 fc3 = Activation('relu')(fc3)
+fc3 = Dropout(0.5)(fc3)
 #End of FC3
 
 #Final output layer
