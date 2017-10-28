@@ -15,6 +15,12 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./images/model_architecture.png "Model Visualization"
+[image2]: ./images/center_1.jpg "Center 1"
+[image3]: ./images/center_2.jpg "Center 2"
+[image4]: ./images/recovery_1.jpg "Recovery 1"
+[image5]: ./images/recovery_2.jpg "Recovery 2"
+[image6]: ./images/recovery_3.jpg "Recovery 3"
+[image7]: ./images/flipped_1.jpg "Flipped 1"
 
 ---
 ###Files Submitted & Code Quality
@@ -103,20 +109,20 @@ Here is a visualization of the architecture.
 To capture good driving behavior, I first recorded 3-4 laps on track one using center lane driving. Here is an example image of center lane driving:
 
 ![alt text][image2]
+![alt text][image3]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to how to go back to center if it want too left or right. 
 These images show what a recovery looks like:
 
-![alt text][image3]
 ![alt text][image4]
 ![alt text][image5]
+![alt text][image6]
 
 Then I repeated this process on track two in order to get more data points. I did a 1 lap of driving on track 2. But created more recovering data for track 2 for sharp turns.
 
 To augment the data sat, I also flipped images and angles thinking that this would remove the bias towards the tracking data and also teach model how to drive if in flipped scenario for better generalization. It also helped in providing more training data to model. 
 For example, here is an image that has then been flipped:
 
-![alt text][image6]
 ![alt text][image7]
 
 After the collection process, I had 15000 number of data points. 
